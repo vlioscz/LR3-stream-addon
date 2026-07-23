@@ -26,6 +26,19 @@ ICE_HOSTNAME="$HA_IP"
 log "Startuji LR3 Stream (port=${PORT}, bitrate=${BITRATE}k, spotify=${SPOTIFY_BITRATE}k)"
 log "Fallback rádio: ${FALLBACK_URL} (prodleva ${FALLBACK_DELAY}s)"
 
+# --- D-Bus + Avahi (librespot z raspotify používá avahi zeroconf backend) ---
+log "Spouštím D-Bus + Avahi (pro Spotify Connect discovery)..."
+mkdir -p /run/dbus /run/avahi-daemon
+rm -f /run/dbus/pid
+dbus-uuidgen --ensure 2>/dev/null || true
+if dbus-daemon --system --fork; then log "D-Bus běží"; else log "VAROVÁNÍ: D-Bus se nespustil"; fi
+sleep 1
+if avahi-daemon --no-chroot --no-drop-root --no-rlimits --daemonize; then
+  log "Avahi běží"
+else
+  log "VAROVÁNÍ: Avahi se nespustil — Spotify discovery nemusí fungovat"
+fi
+
 # --- Vygeneruj Icecast konfiguraci ze šablony ---
 sed -e "s|%%PORT%%|${PORT}|g" \
     -e "s|%%SOURCE_PASSWORD%%|${SRCPASS}|g" \
@@ -62,6 +75,7 @@ if [ "${ZONE_COUNT}" -gt 0 ]; then
     ZNAME=$(jq -r ".zones[$i].name // \"Zone $i\"" "$OPTIONS")
     ZMOUNT=$(jq -r ".zones[$i].mount // \"zone$i\"" "$OPTIONS")
     LIQ="/tmp/zone_${ZMOUNT}.liq"
+    : > "/tmp/librespot_${ZMOUNT}.log"
 
     sed -e "s|%%PORT%%|${PORT}|g" \
         -e "s|%%SOURCE_PASSWORD%%|${SRCPASS}|g" \
@@ -81,6 +95,9 @@ if [ "${ZONE_COUNT}" -gt 0 ]; then
 else
   log "CHYBA: žádná zóna není nakonfigurovaná — není co streamovat."
 fi
+
+# Vypisuj librespot stderr do logu addonu (kvůli diagnostice).
+tail -qF /tmp/librespot_*.log 2>/dev/null | sed -u 's/^/[librespot] /' &
 
 # --- Přehledný, copy-paste banner s adresami streamů ---
 echo "=================================================================="

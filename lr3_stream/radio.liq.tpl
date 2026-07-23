@@ -7,12 +7,13 @@ settings.log.level.set(3)
 settings.init.allow_root.set(true)
 
 # --- Spotify Connect přes librespot ---
-# librespot se přes zeroconf objeví na LAN jako Spotify zařízení "%%ZONE_NAME%%"
+# librespot se přes avahi objeví na LAN jako Spotify zařízení "%%ZONE_NAME%%"
 # a posílá raw S16 PCM na stdout. Liquidsoap ho čte a při pádu restartuje.
+# Jeho stderr jde do /tmp logu (run.sh ho vypisuje); "; sleep 3" tlumí restart smyčku.
 spotify_raw = input.external.rawaudio(
   id="spotify_%%MOUNT%%",
   restart=true, restart_on_error=true,
-  'librespot --name "%%ZONE_NAME%%" --device-type speaker --backend pipe --format S16 --bitrate %%SPOTIFY_BITRATE%% --initial-volume 100 --disable-audio-cache --enable-volume-normalisation'
+  'librespot --name "%%ZONE_NAME%%" --device-type speaker --backend pipe --format S16 --bitrate %%SPOTIFY_BITRATE%% --initial-volume 100 --disable-audio-cache --enable-volume-normalisation 2>>/tmp/librespot_%%MOUNT%%.log; sleep 3'
 )
 # Když Spotify nehraje (ticho déle než prodleva), zdroj se stane nedostupným
 # a převezme fallback. Jakmile zvuk naskočí, Spotify má zase přednost.

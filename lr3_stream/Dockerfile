@@ -36,6 +36,15 @@ RUN set -eu; \
     rm -rf /tmp/librespot.deb /tmp/rasp; \
     librespot --version
 
+# D-Bus + Avahi — the raspotify librespot uses the avahi zeroconf backend, so it
+# needs a running avahi-daemon. We run our own, self-contained in the container.
+# Kept as a separate layer so the (slow) apt + librespot layers above stay cached.
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends \
+      dbus \
+      avahi-daemon \
+ && rm -rf /var/lib/apt/lists/*
+
 COPY run.sh /run.sh
 COPY icecast.xml.tpl /etc/lr3/icecast.xml.tpl
 COPY radio.liq.tpl /etc/lr3/radio.liq.tpl

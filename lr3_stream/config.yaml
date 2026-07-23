@@ -1,6 +1,6 @@
 name: LR3 Stream
 slug: lr3_stream
-version: "0.2.0"
+version: "0.2.1"
 description: Stabilní lokální stream (Icecast + Liquidsoap) se Spotify Connect a fallbackem na online rádio
 url: https://github.com/vlioscz/LR3-stream-addon
 arch:
