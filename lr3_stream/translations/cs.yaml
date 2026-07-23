@@ -20,6 +20,11 @@ configuration:
     description: >-
       Kvalita streamu ze Spotify Connect (librespot): 96, 160 nebo 320 kbps.
       Vyžaduje Spotify Premium účet.
+  fallback_enabled:
+    name: Záložní rádio zapnuté
+    description: >-
+      Zapnuto: po prodlevě nečinnosti Spotify naskočí do streamu záložní online
+      rádio. Vypnuto: po prodlevě zůstane ticho a LARA rádia se vypnou (OFF).
   fallback_url:
     name: URL záložního rádia
     description: >-

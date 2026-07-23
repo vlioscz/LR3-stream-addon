@@ -12,6 +12,7 @@ PORT=$(jq -r '.port // 8000' "$OPTIONS")
 SRCPASS=$(jq -r '.source_password // "changeme"' "$OPTIONS")
 FALLBACK_URL=$(jq -r '.fallback_url // "http://ice.actve.net/fm-evropa2-128"' "$OPTIONS")
 FALLBACK_DELAY=$(jq -r '.fallback_delay // 15' "$OPTIONS")
+FALLBACK_ENABLED=$(jq -r '.fallback_enabled // true' "$OPTIONS")
 BITRATE=$(jq -r '.bitrate // 192' "$OPTIONS")
 SPOTIFY_BITRATE=$(jq -r '.spotify_bitrate // 320' "$OPTIONS")
 
@@ -24,7 +25,11 @@ ICE_HOSTNAME="$HA_IP"
 [ "$ICE_HOSTNAME" = "<HA_IP>" ] && ICE_HOSTNAME="localhost"
 
 log "Startuji LR3 Stream (port=${PORT}, bitrate=${BITRATE}k, spotify=${SPOTIFY_BITRATE}k)"
-log "Fallback rádio: ${FALLBACK_URL} (prodleva ${FALLBACK_DELAY}s)"
+if [ "${FALLBACK_ENABLED}" = "true" ]; then
+  log "Fallback rádio: ${FALLBACK_URL} (prodleva ${FALLBACK_DELAY}s)"
+else
+  log "Fallback rádio: VYPNUTO — po ${FALLBACK_DELAY}s nečinnosti zůstane ticho"
+fi
 
 # --- D-Bus + Avahi (librespot z raspotify používá avahi zeroconf backend) ---
 log "Spouštím D-Bus + Avahi (pro Spotify Connect discovery)..."
@@ -84,6 +89,7 @@ if [ "${ZONE_COUNT}" -gt 0 ]; then
         -e "s|%%SPOTIFY_BITRATE%%|${SPOTIFY_BITRATE}|g" \
         -e "s|%%FALLBACK_URL%%|${FALLBACK_URL}|g" \
         -e "s|%%FALLBACK_DELAY%%|${FALLBACK_DELAY}|g" \
+        -e "s|%%FALLBACK_ENABLED%%|${FALLBACK_ENABLED}|g" \
         -e "s|%%MOUNT%%|${ZMOUNT}|g" \
         -e "s|%%ZONE_NAME%%|${ZNAME}|g" \
         "${TPL_DIR}/radio.liq.tpl" > "${LIQ}"

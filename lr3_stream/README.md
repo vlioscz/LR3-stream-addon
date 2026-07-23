@@ -12,18 +12,19 @@ Stabilní lokální rozhlasový stream (Icecast + Liquidsoap), který **nikdy ne
 
 | Volba | Výchozí | Popis |
 |---|---|---|
-| `port` | `8000` | Port lokálního streamu. |
+| `port` | `8121` | Port lokálního streamu. |
 | `source_password` | `changeme` | Interní heslo Icecastu (zdroj/admin). Posluchači ho nepotřebují. |
 | `bitrate` | `192` | Bitrate výstupního MP3 (kbps). |
 | `spotify_bitrate` | `320` | Kvalita Spotify (96/160/320). |
+| `fallback_enabled` | `true` | Zapnout záložní rádio. Vypnuto → po prodlevě ticho (a rádia OFF). |
 | `fallback_url` | `…fm-evropa2-128` | Záložní online rádio. |
 | `fallback_delay` | `15` | Prodleva (s) ticha, než naskočí záloha. |
-| `zones` | `Obývák / obyvak` | Zóny: `name` (= jméno Spotify zařízení) + `mount`. |
+| `zones` | `Všude / vsude` | Zóny: `name` (= jméno Spotify zařízení) + `mount`. Zóna „Všude" = sdílený stream pro všechna rádia. |
 
 ## Adresa streamu
 
 ```
-http://<IP_HA>:<port>/<mount>      např.  http://192.168.88.10:8000/obyvak
+http://<IP_HA>:<port>/<mount>      např.  http://192.168.88.10:8121/vsude
 ```
 
 ## Stav

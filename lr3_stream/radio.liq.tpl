@@ -27,13 +27,16 @@ spotify_hold = fallback(id="spotify_hold_%%MOUNT%%", track_sensitive=false,
 spotify = blank.strip(id="spotify_live_%%MOUNT%%", max_blank=%%FALLBACK_DELAY%%., threshold=-50., spotify_hold)
 
 # --- Záložní online rádio (např. Evropa 2), reconnectuje se samo ---
+# Když je fallback vypnutý, tenhle zdroj se nezapojí do grafu a vůbec se nepřipojuje.
 radio = input.http(id="fallback_%%MOUNT%%", "%%FALLBACK_URL%%")
 
 # --- Poslední záchrana: nekonečné ticho, aby byl mount vždy krmený ---
 silent = blank(id="silence_%%MOUNT%%", duration=-1.)
 
 # Priorita. track_sensitive=false → přepne v okamžiku, kdy zdroj (ne)naskočí.
-main = fallback(id="main_%%MOUNT%%", track_sensitive=false, [spotify, radio, silent])
+# S vypnutým fallbackem zůstane po prodlevě ticho (a LARA controller pošle rádiím OFF).
+sources = if %%FALLBACK_ENABLED%% then [spotify, radio, silent] else [spotify, silent] end
+main = fallback(id="main_%%MOUNT%%", track_sensitive=false, sources)
 
 # Jeden trvalý enkodér + výstup do Icecastu. `main` je infallible (ticho vždy),
 # takže výstup zůstane připojený napořád.

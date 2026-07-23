@@ -22,18 +22,26 @@ Po startu se v Spotify appce (stejná síť, **Premium účet**) objeví zaříz
 
 | Volba | Výchozí | Popis |
 |---|---|---|
-| `port` | `8000` | Port lokálního streamu (Icecast). |
+| `port` | `8121` | Port lokálního streamu (Icecast). |
 | `source_password` | `changeme` | Interní heslo Icecastu (zdroj/admin). Posluchači ho nepotřebují. |
 | `bitrate` | `192` | Bitrate výstupního MP3 streamu (kbps). |
 | `spotify_bitrate` | `320` | Kvalita Spotify (96 / 160 / 320). |
+| `fallback_enabled` | `true` | Zapnout záložní rádio. Vypnuto → po prodlevě ticho (a rádia OFF). |
 | `fallback_url` | `…fm-evropa2-128` | Online rádio jako záloha, když Spotify nehraje. |
 | `fallback_delay` | `15` | Prodleva (s) ticha, než naskočí záloha. |
-| `zones` | `Obývák / obyvak` | Zóny: každá má `name` (= i jméno Spotify zařízení) a `mount`. |
+| `zones` | `Všude / vsude` | Zóny: každá má `name` (= i jméno Spotify zařízení) a `mount`. |
+
+### Multi-room
+
+Spotify hraje vždy jen do **jednoho** Connect zařízení. Víc reproduktorů se proto řeší
+**sdíleným streamem**: zóna „Všude" je výchozí stream, na který jsou naladěná všechna
+rádia — když do ní pustíš Spotify, hraje všude. Zóny pro jednotlivé místnosti slouží
+k tomu pustit hudbu jen do jedné z nich.
 
 ## Kde stream běží
 
 ```
-http://<IP_HA>:<port>/<mount>      např.  http://192.168.88.10:8000/obyvak
+http://<IP_HA>:<port>/<mount>      např.  http://192.168.88.10:8121/vsude
 ```
 
 Přesné adresy addon vypíše po startu do **logu** — stačí zkopírovat do VLC / rádia / prohlížeče.
