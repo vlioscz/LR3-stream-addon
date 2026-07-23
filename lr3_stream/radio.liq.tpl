@@ -1,5 +1,5 @@
 # LR3 Stream — zóna "%%ZONE_NAME%%"  ->  mount /%%MOUNT%%
-# Priorita: Spotify Connect > (po prodlevě) online rádio > ticho. Mount NIKDY nespadne.
+# Priorita: Spotify Connect > online rádio > ticho. Mount NIKDY nespadne.
 
 settings.log.stdout.set(true)
 settings.log.level.set(3)
@@ -8,15 +8,18 @@ settings.init.allow_root.set(true)
 
 # --- Spotify Connect přes librespot ---
 # librespot se přes avahi objeví na LAN jako Spotify zařízení "%%ZONE_NAME%%"
-# a posílá raw S16 PCM na stdout. Liquidsoap ho čte a při pádu restartuje.
-# Jeho stderr jde do /tmp logu (run.sh ho vypisuje); "; sleep 3" tlumí restart smyčku.
+# a posílá raw S16 PCM na stdout. Píše RYCHLEJI než realtime, takže bez omezení
+# se buffer plní až na 'max' a tam trvale stojí — to je hlavní zdroj latence streamu.
+# Držíme buffer/max nízko (nízká latence); max=4 nechává rezervu proti síťovému jitteru.
 spotify_raw = input.external.rawaudio(
   id="spotify_%%MOUNT%%",
   restart=true, restart_on_error=true,
-  'librespot --name "%%ZONE_NAME%%" --device-type speaker --backend pipe --format S16 --bitrate %%SPOTIFY_BITRATE%% --initial-volume 100 --disable-audio-cache --enable-volume-normalisation 2>>/tmp/librespot_%%MOUNT%%.log; sleep 3'
+  buffer=1.0, max=4., log_overfull=false,
+  'librespot --name "%%ZONE_NAME%%" --device-type speaker --backend pipe --format S16 --bitrate %%SPOTIFY_BITRATE%% --initial-volume 100 --cache /data/librespot_%%MOUNT%% --cache-size-limit 1G --enable-volume-normalisation 2>>/tmp/librespot_%%MOUNT%%.log; sleep 3'
 )
-# Když Spotify nehraje (ticho déle než prodleva), zdroj se stane nedostupným
-# a převezme fallback. Jakmile zvuk naskočí, Spotify má zase přednost.
+# Když librespot nehraje, PŘESTANE zapisovat (nevydává ticho) → zdroj se stane
+# nedostupným a převezme fallback (rádio). Jakmile zvuk naskočí, Spotify má
+# okamžitě přednost (switch-IN je jeden frame; max_blank řídí jen switch-OUT).
 spotify = blank.strip(id="spotify_live_%%MOUNT%%", max_blank=%%FALLBACK_DELAY%%., threshold=-40., spotify_raw)
 
 # --- Záložní online rádio (např. Evropa 2), reconnectuje se samo ---

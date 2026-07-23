@@ -76,6 +76,7 @@ if [ "${ZONE_COUNT}" -gt 0 ]; then
     ZMOUNT=$(jq -r ".zones[$i].mount // \"zone$i\"" "$OPTIONS")
     LIQ="/tmp/zone_${ZMOUNT}.liq"
     : > "/tmp/librespot_${ZMOUNT}.log"
+    mkdir -p "/data/librespot_${ZMOUNT}"
 
     sed -e "s|%%PORT%%|${PORT}|g" \
         -e "s|%%SOURCE_PASSWORD%%|${SRCPASS}|g" \
