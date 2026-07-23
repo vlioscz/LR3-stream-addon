@@ -1,0 +1,32 @@
+name: LR3 Stream
+slug: lr3_stream
+version: "0.1.0"
+description: Stabilní lokální rozhlasový stream (Icecast + Liquidsoap) s fallbackem na online rádio
+url: https://github.com/vlioscz/LR3-stream-addon
+arch:
+  - aarch64
+  - amd64
+startup: services
+boot: auto
+host_network: true
+init: false
+
+options:
+  port: 8000
+  source_password: "changeme"
+  bitrate: 192
+  fallback_url: "http://ice.actve.net/fm-evropa2-128"
+  fallback_delay: 15
+  zones:
+    - name: "Obývák"
+      mount: obyvak
+
+schema:
+  port: int
+  source_password: password
+  bitrate: int
+  fallback_url: str
+  fallback_delay: int
+  zones:
+    - name: str
+      mount: str
