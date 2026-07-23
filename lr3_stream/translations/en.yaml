@@ -35,8 +35,11 @@ configuration:
     description: >-
       Seconds of silence (Spotify idle) before the fallback radio kicks in.
   zones:
-    name: Zones
+    name: Manual streams
     description: >-
-      Stream zones. Each zone has a name (also used as its Spotify Connect device
-      name) and a mount (the last part of the URL). One zone = one stream address
-      http://<HA-IP>:<port>/<mount> and one Spotify device.
+      Optional extra streams you manage yourself (add or delete freely) — they may
+      serve purposes other than LARA. The "Default" stream and the streams for
+      discovered LARA radios are created automatically, are not listed here, and
+      cannot be deleted. Each has a name (= its Spotify Connect device name) and a
+      mount (the last part of the URL): http://<HA-IP>:<port>/<mount>. The mount
+      "default" is reserved.

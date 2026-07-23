@@ -29,19 +29,32 @@ Po startu se v Spotify appce (stejná síť, **Premium účet**) objeví zaříz
 | `fallback_enabled` | `true` | Zapnout záložní rádio. Vypnuto → po prodlevě ticho (a rádia OFF). |
 | `fallback_url` | `…fm-evropa2-128` | Online rádio jako záloha, když Spotify nehraje. |
 | `fallback_delay` | `15` | Prodleva (s) ticha, než naskočí záloha. |
-| `zones` | `Všude / vsude` | Zóny: každá má `name` (= i jméno Spotify zařízení) a `mount`. |
+| `zones` | `[]` | **Ruční** streamy navíc (jdou přidávat i mazat). Stream `Default` a streamy pro nalezená rádia vznikají automaticky a v tomto seznamu nejsou. |
+
+### Streamy: automatické vs. ruční
+
+- **`Default`** (mount `/default`) — vzniká **vždy automaticky** a **nejde smazat**. Je to
+  sdílený stream, na který jsou normálně naladěná všechna rádia.
+- **Streamy pro rádia** — vzniknou automaticky pro každé nalezené LARA rádio, pojmenované
+  podle něj. Taky nejdou smazat. *(připravuje se)*
+- **Ruční streamy** (`zones`) — volitelné, spravuješ je sám, klidně i pro jiné využití.
 
 ### Multi-room
 
-Spotify hraje vždy jen do **jednoho** Connect zařízení. Víc reproduktorů se proto řeší
-**sdíleným streamem**: zóna „Všude" je výchozí stream, na který jsou naladěná všechna
-rádia — když do ní pustíš Spotify, hraje všude. Zóny pro jednotlivé místnosti slouží
-k tomu pustit hudbu jen do jedné z nich.
+Spotify hraje vždy jen do **jednoho** Connect zařízení — víc reproduktorů najednou přes
+Spotify nejde. Řeší se to sdíleným streamem:
+
+- Pustíš Spotify do zařízení **„Default"** → slyší to **všechna** rádia (jsou na `/default`) = multi-room.
+- Pustíš Spotify do zařízení **konkrétní místnosti** → hraje **jen ta místnost**; ostatní zůstanou na `Default`.
+
+> ⚠️ Multi-room **nefunguje** tak, že pustíš hudbu do jedné místnosti a ostatní se přidají —
+> každý stream je samostatný, takže ten druhý správně přejde na fallback. Pro „hrát všude"
+> musí rádia poslouchat `/default` a Spotify musí hrát do zařízení **„Default"**.
 
 ## Kde stream běží
 
 ```
-http://<IP_HA>:<port>/<mount>      např.  http://192.168.88.10:8121/vsude
+http://<IP_HA>:<port>/<mount>      např.  http://192.168.88.10:8121/default
 ```
 
 Přesné adresy addon vypíše po startu do **logu** — stačí zkopírovat do VLC / rádia / prohlížeče.

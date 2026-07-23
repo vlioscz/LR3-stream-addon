@@ -69,38 +69,54 @@ else
   log "VAROVÁNÍ: Icecast zatím není dostupný na :${PORT} — pokračuji"
 fi
 
-# --- Spusť jeden Liquidsoap na každou nakonfigurovanou zónu ---
+# --- Spusť jeden Liquidsoap na každý stream ---
 declare -a LIQ_PIDS=()
 declare -a ZONE_URLS=()
-ZONE_COUNT=$(jq '.zones | length' "$OPTIONS")
-log "Nakonfigurované zóny: ${ZONE_COUNT}"
 
+# Vytvoří a spustí jeden stream (zónu).
+start_zone() {
+  local ZNAME="$1" ZMOUNT="$2" KIND="$3"
+  local LIQ="/tmp/zone_${ZMOUNT}.liq"
+  : > "/tmp/librespot_${ZMOUNT}.log"
+  mkdir -p "/data/librespot_${ZMOUNT}"
+
+  sed -e "s|%%PORT%%|${PORT}|g" \
+      -e "s|%%SOURCE_PASSWORD%%|${SRCPASS}|g" \
+      -e "s|%%BITRATE%%|${BITRATE}|g" \
+      -e "s|%%SPOTIFY_BITRATE%%|${SPOTIFY_BITRATE}|g" \
+      -e "s|%%FALLBACK_URL%%|${FALLBACK_URL}|g" \
+      -e "s|%%FALLBACK_DELAY%%|${FALLBACK_DELAY}|g" \
+      -e "s|%%FALLBACK_ENABLED%%|${FALLBACK_ENABLED}|g" \
+      -e "s|%%MOUNT%%|${ZMOUNT}|g" \
+      -e "s|%%ZONE_NAME%%|${ZNAME}|g" \
+      "${TPL_DIR}/radio.liq.tpl" > "${LIQ}"
+
+  log "[${KIND}] '${ZNAME}'  ->  Spotify zařízení '${ZNAME}'  |  http://${HA_IP}:${PORT}/${ZMOUNT}"
+  liquidsoap "${LIQ}" &
+  LIQ_PIDS+=("$!")
+  ZONE_URLS+=("${ZNAME}|http://${HA_IP}:${PORT}/${ZMOUNT}")
+}
+
+# Výchozí sdílený stream — vytváří se VŽDY automaticky a nejde smazat.
+# Je to ten, na který jsou naladěná všechna rádia (multi-room).
+start_zone "Default" "default" "auto"
+
+# TODO Fáze 2: po auto-discovery zde přibude jeden automatický stream na každé
+# nalezené LARA rádio, pojmenovaný podle názvu toho rádia.
+
+# Ručně přidané streamy z konfigurace (jen ty smí uživatel spravovat/mazat).
+ZONE_COUNT=$(jq '.zones | length' "$OPTIONS")
+log "Ručně přidané streamy: ${ZONE_COUNT}"
 if [ "${ZONE_COUNT}" -gt 0 ]; then
   for i in $(seq 0 $((ZONE_COUNT - 1))); do
     ZNAME=$(jq -r ".zones[$i].name // \"Zone $i\"" "$OPTIONS")
     ZMOUNT=$(jq -r ".zones[$i].mount // \"zone$i\"" "$OPTIONS")
-    LIQ="/tmp/zone_${ZMOUNT}.liq"
-    : > "/tmp/librespot_${ZMOUNT}.log"
-    mkdir -p "/data/librespot_${ZMOUNT}"
-
-    sed -e "s|%%PORT%%|${PORT}|g" \
-        -e "s|%%SOURCE_PASSWORD%%|${SRCPASS}|g" \
-        -e "s|%%BITRATE%%|${BITRATE}|g" \
-        -e "s|%%SPOTIFY_BITRATE%%|${SPOTIFY_BITRATE}|g" \
-        -e "s|%%FALLBACK_URL%%|${FALLBACK_URL}|g" \
-        -e "s|%%FALLBACK_DELAY%%|${FALLBACK_DELAY}|g" \
-        -e "s|%%FALLBACK_ENABLED%%|${FALLBACK_ENABLED}|g" \
-        -e "s|%%MOUNT%%|${ZMOUNT}|g" \
-        -e "s|%%ZONE_NAME%%|${ZNAME}|g" \
-        "${TPL_DIR}/radio.liq.tpl" > "${LIQ}"
-
-    log "Zóna '${ZNAME}'  ->  Spotify zařízení '${ZNAME}'  |  http://${HA_IP}:${PORT}/${ZMOUNT}"
-    liquidsoap "${LIQ}" &
-    LIQ_PIDS+=("$!")
-    ZONE_URLS+=("${ZNAME}|http://${HA_IP}:${PORT}/${ZMOUNT}")
+    if [ "${ZMOUNT}" = "default" ]; then
+      log "VAROVÁNÍ: ruční stream s mountem 'default' přeskočen — je rezervovaný."
+      continue
+    fi
+    start_zone "${ZNAME}" "${ZMOUNT}" "ruční"
   done
-else
-  log "CHYBA: žádná zóna není nakonfigurovaná — není co streamovat."
 fi
 
 # Vypisuj librespot stderr do logu addonu (kvůli diagnostice).

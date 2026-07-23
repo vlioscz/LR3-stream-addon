@@ -19,12 +19,18 @@ Stabilní lokální rozhlasový stream (Icecast + Liquidsoap), který **nikdy ne
 | `fallback_enabled` | `true` | Zapnout záložní rádio. Vypnuto → po prodlevě ticho (a rádia OFF). |
 | `fallback_url` | `…fm-evropa2-128` | Záložní online rádio. |
 | `fallback_delay` | `15` | Prodleva (s) ticha, než naskočí záloha. |
-| `zones` | `Všude / vsude` | Zóny: `name` (= jméno Spotify zařízení) + `mount`. Zóna „Všude" = sdílený stream pro všechna rádia. |
+| `zones` | `[]` | **Ruční** streamy navíc (jdou mazat). `Default` a streamy pro nalezená rádia vznikají automaticky a nejsou zde. |
+
+## Streamy
+
+- **`Default`** (`/default`) — vzniká vždy automaticky, nejde smazat. Sdílený stream, na který jsou naladěná všechna rádia.
+- **Multi-room:** pusť Spotify do zařízení **„Default"** → hraje na všech rádiích. Do zařízení konkrétní místnosti → hraje jen ta místnost.
+- Ruční streamy (`zones`) si spravuješ sám.
 
 ## Adresa streamu
 
 ```
-http://<IP_HA>:<port>/<mount>      např.  http://192.168.88.10:8121/vsude
+http://<IP_HA>:<port>/<mount>      např.  http://192.168.88.10:8121/default
 ```
 
 ## Stav

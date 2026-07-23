@@ -34,8 +34,11 @@ configuration:
     description: >-
       Sekundy ticha (Spotify nehraje), než naskočí záložní rádio.
   zones:
-    name: Zóny
+    name: Ruční streamy
     description: >-
-      Zóny streamu. Každá má název (slouží i jako jméno Spotify Connect zařízení)
-      a mount (poslední část URL). Jedna zóna = jedna adresa streamu
-      http://<IP-HA>:<port>/<mount> a jedno Spotify zařízení.
+      Volitelné streamy navíc, které si spravuješ sám (jdou přidávat i mazat) —
+      klidně i pro jiné využití než pro LARA. Výchozí stream „Default" a streamy
+      pro nalezená LARA rádia vznikají automaticky, v tomto seznamu nejsou a
+      smazat je nelze. Každý má název (= jméno Spotify Connect zařízení) a mount
+      (poslední část URL): http://<IP-HA>:<port>/<mount>. Mount „default" je
+      rezervovaný.
