@@ -17,10 +17,14 @@ spotify_raw = input.external.rawaudio(
   buffer=1.0, max=4., log_overfull=false,
   'librespot --name "%%ZONE_NAME%%" --device-type speaker --backend pipe --format S16 --bitrate %%SPOTIFY_BITRATE%% --initial-volume 100 --cache /data/librespot_%%MOUNT%% --cache-size-limit 1G --enable-volume-normalisation 2>>/tmp/librespot_%%MOUNT%%.log; sleep 3'
 )
-# Když librespot nehraje, PŘESTANE zapisovat (nevydává ticho) → zdroj se stane
-# nedostupným a převezme fallback (rádio). Jakmile zvuk naskočí, Spotify má
-# okamžitě přednost (switch-IN je jeden frame; max_blank řídí jen switch-OUT).
-spotify = blank.strip(id="spotify_live_%%MOUNT%%", max_blank=%%FALLBACK_DELAY%%., threshold=-40., spotify_raw)
+
+# librespot při pauze PŘESTANE zapisovat (nevydává ticho). Obalíme ho proto tichem,
+# aby byl zdroj VŽDY dostupný a blank.strip měl co měřit. Díky tomu se při pauze drží
+# ticho po dobu %%FALLBACK_DELAY%%s a teprve PAK naskočí rádio — krátká pauza nebo
+# přechod mezi skladbami rádio nespustí. Obnovení Spotify přepne zpět okamžitě.
+spotify_hold = fallback(id="spotify_hold_%%MOUNT%%", track_sensitive=false,
+                        [spotify_raw, blank(id="pause_%%MOUNT%%", duration=-1.)])
+spotify = blank.strip(id="spotify_live_%%MOUNT%%", max_blank=%%FALLBACK_DELAY%%., threshold=-50., spotify_hold)
 
 # --- Záložní online rádio (např. Evropa 2), reconnectuje se samo ---
 radio = input.http(id="fallback_%%MOUNT%%", "%%FALLBACK_URL%%")
