@@ -13,19 +13,24 @@ configuration:
       Icecast admin stránku nebo zabránit jiným zařízením na síti, aby tlačila
       zvuk do tvého Icecastu.
   bitrate:
-    name: Bitrate (kbps)
-    description: Bitrate MP3 streamu v kbps (např. 128, 192, 320).
+    name: Výstupní bitrate (kbps)
+    description: Bitrate MP3 streamu posílaného do rádií, v kbps (např. 128, 192, 320).
+  spotify_bitrate:
+    name: Kvalita Spotify (kbps)
+    description: >-
+      Kvalita streamu ze Spotify Connect (librespot): 96, 160 nebo 320 kbps.
+      Vyžaduje Spotify Premium účet.
   fallback_url:
     name: URL záložního rádia
     description: >-
-      Online rádio, které hraje jako záloha, když nehraje živý zdroj. (Vstup ze
-      Spotify přijde v další fázi.)
+      Online rádio, které hraje jako záloha, když Spotify nehraje.
   fallback_delay:
     name: Prodleva zálohy (s)
     description: >-
-      Sekundy ticha, než naskočí záložní rádio. Využije se po přidání Spotify.
+      Sekundy ticha (Spotify nehraje), než naskočí záložní rádio.
   zones:
     name: Zóny
     description: >-
-      Zóny streamu. Každá má název a mount (poslední část URL). Jedna zóna =
-      jedna adresa streamu http://<IP-HA>:<port>/<mount>.
+      Zóny streamu. Každá má název (slouží i jako jméno Spotify Connect zařízení)
+      a mount (poslední část URL). Jedna zóna = jedna adresa streamu
+      http://<IP-HA>:<port>/<mount> a jedno Spotify zařízení.

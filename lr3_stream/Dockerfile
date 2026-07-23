@@ -1,11 +1,11 @@
 ARG BUILD_FROM
 FROM ${BUILD_FROM}
 
+ARG BUILD_ARCH=aarch64
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Icecast2 = the streaming server radios connect to.
-# Liquidsoap = the "studio" that feeds one never-dropping source per zone.
-# ffmpeg    = codecs / decoding for the online fallback stream.
+# Icecast2 = streaming server. Liquidsoap = never-dropping source per zone.
+# ffmpeg = codecs. libasound2 = runtime dep of the librespot binary.
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
       icecast2 \
@@ -15,7 +15,26 @@ RUN apt-get update \
       netcat-openbsd \
       ca-certificates \
       media-types \
+      curl \
+      libasound2 \
  && rm -rf /var/lib/apt/lists/*
+
+# librespot (Spotify Connect) — not packaged in apt. Take the binary from the
+# raspotify .deb (bundles librespot v0.8.0) for the target architecture.
+RUN set -eu; \
+    case "${BUILD_ARCH}" in \
+      aarch64) DEB_ARCH=arm64 ;; \
+      amd64)   DEB_ARCH=amd64 ;; \
+      armv7|armhf) DEB_ARCH=armhf ;; \
+      *) echo "Unsupported BUILD_ARCH: ${BUILD_ARCH}" >&2; exit 1 ;; \
+    esac; \
+    DEB="raspotify_0.48.2.librespot.v0.8.0-9c7d756_${DEB_ARCH}.deb"; \
+    curl -fsSL -o /tmp/librespot.deb \
+      "https://github.com/dtcooper/raspotify/releases/download/0.48.2/${DEB}"; \
+    dpkg-deb -x /tmp/librespot.deb /tmp/rasp; \
+    install -m 0755 "$(find /tmp/rasp -type f -name librespot | head -1)" /usr/local/bin/librespot; \
+    rm -rf /tmp/librespot.deb /tmp/rasp; \
+    librespot --version
 
 COPY run.sh /run.sh
 COPY icecast.xml.tpl /etc/lr3/icecast.xml.tpl
