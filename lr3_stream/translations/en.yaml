@@ -1,0 +1,33 @@
+configuration:
+  port:
+    name: Port
+    description: >-
+      Port the local stream (Icecast) listens on. The stream address is
+      http://<HA-IP>:<port>/<mount>. Exact URLs are printed to the add-on log
+      after start.
+  source_password:
+    name: Source password (internal)
+    description: >-
+      Internal Icecast password Liquidsoap uses to publish the stream, and the
+      Icecast admin password. Listeners / radios do NOT need it — listening is
+      open and passwordless. You can leave the default; change it only to secure
+      the Icecast admin page or to stop other devices on your LAN from pushing
+      audio into your Icecast.
+  bitrate:
+    name: Bitrate (kbps)
+    description: MP3 stream bitrate in kbps (e.g. 128, 192, 320).
+  fallback_url:
+    name: Fallback radio URL
+    description: >-
+      Online radio that plays as a fallback when no live source is active. (The
+      Spotify input arrives in a later phase.)
+  fallback_delay:
+    name: Fallback delay (s)
+    description: >-
+      Seconds of silence before the fallback radio kicks in. Used once the
+      Spotify input is added.
+  zones:
+    name: Zones
+    description: >-
+      Stream zones. Each zone has a name and a mount (the last part of the URL).
+      One zone = one stream address http://<HA-IP>:<port>/<mount>.

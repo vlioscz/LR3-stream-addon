@@ -1,0 +1,31 @@
+configuration:
+  port:
+    name: Port
+    description: >-
+      Port, na kterém poslouchá lokální stream (Icecast). Adresa streamu je
+      http://<IP-HA>:<port>/<mount>. Přesné adresy addon vypíše do logu po startu.
+  source_password:
+    name: Heslo zdroje (interní)
+    description: >-
+      Interní heslo Icecastu, kterým Liquidsoap publikuje stream, a heslo do
+      Icecast admin stránky. Posluchači / rádia ho NEPOTŘEBUJÍ — poslech je
+      volný, bez hesla. Klidně nech výchozí; měň jen když chceš zabezpečit
+      Icecast admin stránku nebo zabránit jiným zařízením na síti, aby tlačila
+      zvuk do tvého Icecastu.
+  bitrate:
+    name: Bitrate (kbps)
+    description: Bitrate MP3 streamu v kbps (např. 128, 192, 320).
+  fallback_url:
+    name: URL záložního rádia
+    description: >-
+      Online rádio, které hraje jako záloha, když nehraje živý zdroj. (Vstup ze
+      Spotify přijde v další fázi.)
+  fallback_delay:
+    name: Prodleva zálohy (s)
+    description: >-
+      Sekundy ticha, než naskočí záložní rádio. Využije se po přidání Spotify.
+  zones:
+    name: Zóny
+    description: >-
+      Zóny streamu. Každá má název a mount (poslední část URL). Jedna zóna =
+      jedna adresa streamu http://<IP-HA>:<port>/<mount>.
