@@ -43,11 +43,13 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends \
       dbus \
       avahi-daemon \
+      python3 \
  && rm -rf /var/lib/apt/lists/*
 
 COPY run.sh /run.sh
 COPY icecast.xml.tpl /etc/lr3/icecast.xml.tpl
 COPY radio.liq.tpl /etc/lr3/radio.liq.tpl
+COPY lr3ctl /opt/lr3ctl
 
 RUN chmod a+x /run.sh
 

@@ -34,6 +34,24 @@ configuration:
     name: Fallback delay (s)
     description: >-
       Seconds of silence (Spotify idle) before the fallback radio kicks in.
+  control_mode:
+    name: LARA radio control
+    description: >-
+      off = only discover and log radios (default, never switches). preset = LARA
+      tunes to our stream as one of its stored radio presets (select_station).
+      slimproto = we push the stream to LARA via a SlimProto server (:3483). Turn
+      preset/slimproto on only once a real LARA is present.
+  lara_username:
+    name: LARA username
+    description: Login name for the LARA radios (default "admin").
+  lara_password:
+    name: LARA password
+    description: Password for the LARA radios (default "elkoep").
+  lara_hosts:
+    name: LARA manual IPs
+    description: >-
+      Optional list of LARA IP addresses for when auto-discovery (UDP broadcast)
+      cannot find them — e.g. on a different subnet.
   zones:
     name: Manual streams
     description: >-

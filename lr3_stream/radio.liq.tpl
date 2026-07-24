@@ -15,7 +15,7 @@ spotify_raw = input.external.rawaudio(
   id="spotify_%%MOUNT%%",
   restart=true, restart_on_error=true,
   buffer=1.0, max=1.5, log_overfull=false,
-  'librespot --name "%%ZONE_NAME%%" --device-type speaker --backend pipe --format S16 --bitrate %%SPOTIFY_BITRATE%% --initial-volume 100 --cache /data/librespot_%%MOUNT%% --cache-size-limit 1G --enable-volume-normalisation 2>>/tmp/librespot_%%MOUNT%%.log; sleep 3'
+  'LR3_MOUNT=%%MOUNT%% librespot --name "%%ZONE_NAME%%" --device-type speaker --backend pipe --format S16 --bitrate %%SPOTIFY_BITRATE%% --initial-volume 100 --cache /data/librespot_%%MOUNT%% --cache-size-limit 1G --enable-volume-normalisation --onevent /etc/lr3/spotify_event.sh 2>>/tmp/librespot_%%MOUNT%%.log; sleep 3'
 )
 
 # librespot při pauze PŘESTANE zapisovat (nevydává ticho). Obalíme ho proto tichem,

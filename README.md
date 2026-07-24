@@ -69,9 +69,24 @@ ticho ───────────────────────┘  
 
 Icecast je server, na který se rádia připojují. Liquidsoap je „studio", které do něj posílá **jeden nepřetržitý stream** a přepíná obsah (Spotify → záloha → ticho) **bez shození spojení**, takže posluchači nikdy nevypadnou.
 
+## Ovládání LARA rádií (ELKO EP)
+
+Addon umí **najít LARA rádia** v síti (UDP broadcast) a **přepínat je** na náš stream, když
+se spustí Spotify. Řídí to volba **`control_mode`**:
+
+- **`off`** (výchozí) — jen najde rádia a vypíše je do logu, nic nepřepíná.
+- **`preset`** — LARA naladí náš stream jako svůj uložený **rádio preset** (preset přidáš
+  jednou v ELKO konfiguračce; addon ho pak vybírá podle jména = názvu mountu).
+- **`slimproto`** — addon je **SlimProto (Squeezebox) server** a pushuje stream do LARA
+  (nastav v LAŘE `slim server` + IP tohoto HA).
+
+> `preset`/`slimproto` zapni až **s reálnou LARA** — logika je hotová a otestovaná nasucho,
+> ale finální chování je nutné ověřit na zařízení.
+
 ## Roadmapa
 
 - ✅ **Fáze 1:** stabilní stream + fallback na online rádio, nikdy nespadne.
-- 🧪 **Fáze 1b (v testu):** vstup ze **Spotify Connect** na každou zónu.
-- ⏳ **Fáze 2:** automatické přepínání **LARA rádií** (ELKO EP) na náš stream při startu Spotify + „zdvořilý" režim (nehijackuje rádio hrající něco jiného).
-- ⏳ **Fáze 3:** ověření na reálném zařízení, případně DLNA push.
+- ✅ **Fáze 1b:** vstup ze **Spotify Connect** na každou zónu.
+- 🧪 **Fáze 2 (logika hotová, čeká na zařízení):** hledání a ovládání **LARA rádií** —
+  discovery (UDP broadcast), přepínání přes preset i SlimProto.
+- ⏳ **Fáze 3:** ověření celého toku na reálné LAŘE.

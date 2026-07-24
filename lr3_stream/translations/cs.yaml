@@ -33,6 +33,24 @@ configuration:
     name: Prodleva zálohy (s)
     description: >-
       Sekundy ticha (Spotify nehraje), než naskočí záložní rádio.
+  control_mode:
+    name: Ovládání LARA rádií
+    description: >-
+      off = jen najít rádia a vypsat je do logu (výchozí, nic nepřepíná).
+      preset = LARA naladí náš stream jako svůj uložený rádio preset
+      (select_station). slimproto = pushujeme stream do LARA přes SlimProto
+      server (:3483). Režimy preset/slimproto zapni až s reálnou LARA.
+  lara_username:
+    name: LARA — uživatel
+    description: Přihlašovací jméno k LARA rádiím (výchozí „admin").
+  lara_password:
+    name: LARA — heslo
+    description: Heslo k LARA rádiím (výchozí „elkoep").
+  lara_hosts:
+    name: LARA — ruční IP
+    description: >-
+      Volitelný seznam IP adres LARA rádií pro případ, že je automatické hledání
+      (UDP broadcast) nenajde — např. když jsou v jiné podsíti.
   zones:
     name: Ruční streamy
     description: >-

@@ -69,6 +69,14 @@ else
   log "VAROVÁNÍ: Icecast zatím není dostupný na :${PORT} — pokračuji"
 fi
 
+# --- Spotify play/stop události → stavové soubory per mount (pro LARA controller) ---
+mkdir -p /etc/lr3
+cat > /etc/lr3/spotify_event.sh <<'EOF'
+#!/usr/bin/env sh
+printf '%s' "${PLAYER_EVENT:-}" > "/tmp/spotify_state_${LR3_MOUNT:-unknown}"
+EOF
+chmod +x /etc/lr3/spotify_event.sh
+
 # --- Spusť jeden Liquidsoap na každý stream ---
 declare -a LIQ_PIDS=()
 declare -a ZONE_URLS=()
@@ -133,9 +141,21 @@ echo "------------------------------------------------------------------"
 echo "  Spotify: vyber v appce zařízení podle názvu zóny (Premium, stejná síť)."
 echo "=================================================================="
 
+# --- LARA controller (discovery + přepínání rádií). Bezpečný i bez LARA. ---
+CTRL_PID=""
+if command -v python3 >/dev/null 2>&1; then
+  CMODE=$(jq -r '.control_mode // "off"' "$OPTIONS")
+  log "Spouštím LARA controller (režim: ${CMODE})..."
+  python3 /opt/lr3ctl/controller.py &
+  CTRL_PID=$!
+else
+  log "python3 chybí — LARA controller přeskočen."
+fi
+
 # --- Čisté ukončení ---
 terminate() {
   log "Zastavuji..."
+  [ -n "${CTRL_PID}" ] && kill "${CTRL_PID}" 2>/dev/null
   [ "${#LIQ_PIDS[@]}" -gt 0 ] && kill "${LIQ_PIDS[@]}" 2>/dev/null
   kill "${ICECAST_PID}" 2>/dev/null
   wait 2>/dev/null
