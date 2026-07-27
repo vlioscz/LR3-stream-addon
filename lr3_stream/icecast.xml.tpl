@@ -10,7 +10,7 @@
         <client-timeout>30</client-timeout>
         <header-timeout>15</header-timeout>
         <source-timeout>10</source-timeout>
-        <burst-size>16384</burst-size>
+        <burst-size>8192</burst-size>
     </limits>
 
     <authentication>

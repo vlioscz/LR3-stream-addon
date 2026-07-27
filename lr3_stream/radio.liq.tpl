@@ -10,11 +10,12 @@ settings.init.allow_root.set(true)
 # librespot se přes avahi objeví na LAN jako Spotify zařízení "%%ZONE_NAME%%"
 # a posílá raw S16 PCM na stdout. Píše RYCHLEJI než realtime, takže bez omezení
 # se buffer plní až na 'max' a tam trvale stojí — to je zdroj latence i "dojezdu" při stopu.
-# max=1.5 → krátký ocas; rezervu proti jitteru drží vnitřní buffer librespotu, ne tenhle FIFO.
+# max=0.8/buffer=0.3 → nízká latence i krátký "dojezd"; rezervu proti jitteru drží vnitřní
+# buffer librespotu, ne tenhle FIFO. (Zvyš max, kdyby zvuk sekal na slabé/jitterující síti.)
 spotify_raw = input.external.rawaudio(
   id="spotify_%%MOUNT%%",
   restart=true, restart_on_error=true,
-  buffer=1.0, max=1.5, log_overfull=false,
+  buffer=0.3, max=0.8, log_overfull=false,
   'librespot --name "%%ZONE_NAME%%" --device-type speaker --backend pipe --format S16 --bitrate %%SPOTIFY_BITRATE%% --initial-volume 100 --cache /data/librespot_%%MOUNT%% --cache-size-limit 1G --enable-volume-normalisation 2>>/tmp/librespot_%%MOUNT%%.log; sleep 3'
 )
 
