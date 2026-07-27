@@ -15,7 +15,7 @@ configuration:
       audio into your Icecast.
   bitrate:
     name: Output bitrate (kbps)
-    description: Bitrate of the MP3 stream sent to radios, in kbps (e.g. 128, 192, 320).
+    description: Bitrate of the MP3 stream, in kbps (e.g. 128, 192, 320).
   spotify_bitrate:
     name: Spotify quality (kbps)
     description: >-
@@ -25,7 +25,7 @@ configuration:
     name: Fallback radio enabled
     description: >-
       On: the fallback online radio starts after the Spotify idle delay. Off:
-      the stream stays silent after the delay and the LARA radios are turned off.
+      the stream stays silent after the delay.
   fallback_url:
     name: Fallback radio URL
     description: >-
@@ -34,30 +34,10 @@ configuration:
     name: Fallback delay (s)
     description: >-
       Seconds of silence (Spotify idle) before the fallback radio kicks in.
-  control_mode:
-    name: LARA radio control
-    description: >-
-      off = only discover and log radios (default, never switches). preset = LARA
-      tunes to our stream as one of its stored radio presets (select_station).
-      slimproto = we push the stream to LARA via a SlimProto server (:3483). Turn
-      preset/slimproto on only once a real LARA is present.
-  lara_username:
-    name: LARA username
-    description: Login name for the LARA radios (default "admin").
-  lara_password:
-    name: LARA password
-    description: Password for the LARA radios (default "elkoep").
-  lara_hosts:
-    name: LARA manual IPs
-    description: >-
-      Optional list of LARA IP addresses for when auto-discovery (UDP broadcast)
-      cannot find them — e.g. on a different subnet.
   zones:
-    name: Manual streams
+    name: Streams
     description: >-
-      Optional extra streams you manage yourself (add or delete freely) — they may
-      serve purposes other than LARA. The "Default" stream and the streams for
-      discovered LARA radios are created automatically, are not listed here, and
-      cannot be deleted. Each has a name (= its Spotify Connect device name) and a
-      mount (the last part of the URL): http://<HA-IP>:<port>/<mount>. The mount
-      "default" is reserved.
+      The list of streams you create (add or delete freely). Each stream has a
+      name (= its Spotify Connect device name, shown in the Spotify app) and a
+      mount (the last part of the URL): http://<HA-IP>:<port>/<mount>. At least
+      one stream is required.
