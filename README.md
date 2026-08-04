@@ -1,74 +1,75 @@
 # LR3 Stream — Home Assistant Add-on
 
-[![Přidat repozitář do Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fvlioscz%2FLR3-stream-addon)
+**English** · [Čeština](README.cs.md)
 
-Stabilní **lokální rozhlasový stream** pro Home Assistant. Postaveno na **Icecast + Liquidsoap**, takže stream **nikdy nevypadne**. Do streamu posílá zvuk **Spotify Connect** (přes librespot); když nic nehraje, drží se živý a po nastavené prodlevě naskočí záložní online rádio (např. Evropa 2). Připojí se libovolný přehrávač (VLC, rádia, prohlížeč…) a nic ho neodpojí.
+[![Add repository to Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fvlioscz%2FLR3-stream-addon)
 
-To je hlavní rozdíl proti MPD „HTTPd output", který se při nečinnosti zastaví — a přehrávače to nepochopí a odpojí se.
+A rock-solid **local radio stream** for Home Assistant. Built on **Icecast + Liquidsoap**, so the stream **never drops**. **Spotify Connect** feeds the audio in (via librespot); when nothing is playing it stays alive and, after a configurable delay, an online-radio fallback kicks in (e.g. Evropa 2). Any player (VLC, in-wall radios, a browser…) can tune in and nothing kicks it off.
 
-> **Ovládáš rádia ELKO EP „LARA"?** Automatické přepínání LARA rádií na tento stream přes
-> **Slim server (SlimProto)** řeší samostatný projekt **[LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)**.
-> LR3 Stream je čistý „stabilní stream + Spotify Connect"; nic aktivně nepřepíná.
+That's the key difference from MPD's "HTTPd output", which stops when idle — players don't understand that and disconnect.
+
+> **Do you control ELKO EP "LARA" radios?** Automatically switching LARA radios onto this stream via a
+> **Slim server (SlimProto)** is handled by a separate project, **[LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)**.
+> LR3 Stream is a pure "stable stream + Spotify Connect"; it doesn't actively switch anything.
 
 ---
 
-## Instalace
+## Installation
 
-1. Klikni na tlačítko nahoře (nebo v HA: **Settings → Add-ons → Add-on Store → ⋮ → Repositories** a vlož `https://github.com/vlioscz/LR3-stream-addon`).
-2. Najdi **LR3 Stream** → **Install** (první build chvíli trvá — stahuje se Debian base, Liquidsoap a librespot).
-3. **Configuration** → nastav port a streamy → **Start**.
+1. Click the button above (or in HA: **Settings → Add-ons → Add-on Store → ⋮ → Repositories** and paste `https://github.com/vlioscz/LR3-stream-addon`).
+2. Find **LR3 Stream** → **Install** (the first build takes a while — it downloads the Debian base, Liquidsoap and librespot).
+3. **Configuration** → set the port and streams → **Start**.
 
 ## Spotify Connect
 
-Po startu se v Spotify appce (stejná síť, **Premium účet**) objeví zařízení pojmenované podle streamu (např. „Obývák"). Vyber ho jako reproduktor — hudba poteče do toho streamu. Když přehrávání zastavíš, po `fallback_delay` sekundách naskočí záložní online rádio. **Žádné Spotify heslo se do addonu nezadává** — používá se Spotify Connect discovery (zeroconf).
+After start, a device named after the stream (e.g. "Living room") appears in the Spotify app (same network, **Premium account**). Pick it as the speaker — the music flows into that stream. When you stop playback, the online-radio fallback kicks in after `fallback_delay` seconds. **No Spotify password is entered into the add-on** — it uses Spotify Connect discovery (zeroconf).
 
-## Konfigurace
+## Configuration
 
-| Volba | Výchozí | Popis |
+| Option | Default | Description |
 |---|---|---|
-| `port` | `8121` | Port lokálního streamu (Icecast). |
-| `source_password` | `changeme` | Interní heslo Icecastu (zdroj/admin). Posluchači ho nepotřebují. |
-| `bitrate` | `192` | Bitrate výstupního MP3 streamu (kbps). |
-| `spotify_bitrate` | `320` | Kvalita Spotify (96 / 160 / 320). |
-| `fallback_enabled` | `true` | Zapnout záložní rádio. Vypnuto → po prodlevě ticho. |
-| `fallback_url` | `…fm-evropa2-128` | Online rádio jako záloha, když Spotify nehraje. |
-| `fallback_delay` | `15` | Prodleva (s) ticha, než naskočí záloha. |
-| `zones` | 1× `Default` | **Streamy**, které si vytvoříš (přidávej i mazej). Každý = jeden Spotify Connect zařízení + jeden Icecast mount. |
+| `port` | `8121` | Port of the local stream (Icecast). |
+| `source_password` | `changeme` | Internal Icecast password (source/admin). Listeners don't need it. |
+| `bitrate` | `192` | Output MP3 stream bitrate (kbps). |
+| `spotify_bitrate` | `320` | Spotify quality (96 / 160 / 320). |
+| `fallback_enabled` | `true` | Enable the fallback radio. Off → silence after the delay. |
+| `fallback_url` | `…fm-evropa2-128` | Online radio used as fallback when Spotify isn't playing. |
+| `fallback_delay` | `15` | Seconds of silence before the fallback kicks in. |
+| `zones` | 1× `Default` | **Streams** you create (add or delete freely). Each = one Spotify Connect device + one Icecast mount. |
 
-### Streamy
+### Streams
 
-Streamy vznikají **jen** z volby `zones` — nic se nevytváří automaticky. Každý stream má:
+Streams come **only** from the `zones` option — nothing is created automatically. Each stream has:
 
-- **název** = jméno Spotify Connect zařízení, které se objeví v appce Spotify,
-- **mount** = poslední část URL: `http://<IP-HA>:<port>/<mount>`.
+- a **name** = the Spotify Connect device name shown in the Spotify app,
+- a **mount** = the last part of the URL: `http://<HA-IP>:<port>/<mount>`.
 
-Výchozí konfigurace obsahuje jeden stream „Default" (mount `/default`); klidně ho přejmenuj, přidej další nebo smaž. Je potřeba **aspoň jeden** stream.
+The default config ships one stream "Default" (mount `/default`); rename it, add more, or delete it as you like. **At least one** stream is required.
 
 ### Multi-room
 
-Spotify hraje vždy jen do **jednoho** Connect zařízení. „Hrát všude" vyřešíš jedním **sdíleným** streamem: všechny přehrávače nalaď na stejný mount (např. `/default`) a ve Spotify pusť to jedno zařízení. Pro samostatné místnosti vytvoř zvlášť pojmenované streamy a přehrávače nalaď každý na svůj mount.
+Spotify only ever plays to **one** Connect device. To "play everywhere", use a single **shared** stream: tune all players to the same mount (e.g. `/default`) and play to that one device in Spotify. For separate rooms, create distinctly named streams and tune each player to its own mount.
 
-## Kde stream běží
+## Where the stream lives
 
 ```
-http://<IP_HA>:<port>/<mount>      např.  http://192.168.88.10:8121/default
+http://<HA_IP>:<port>/<mount>      e.g.  http://192.168.88.10:8121/default
 ```
 
-Přesné adresy addon vypíše po startu do **logu** — stačí zkopírovat do VLC / rádia / prohlížeče.
+The exact addresses are printed to the add-on **log** at start — just copy them into VLC / a radio / a browser.
 
-## Jak to funguje
+## How it works
 
 ```
 Spotify Connect (librespot) ─┐
-online rádio (záloha) ───────┼─► Liquidsoap ──► Icecast ──► přehrávače / VLC / …
-ticho ───────────────────────┘   (nikdy nespadne)   (:port)
+online radio (fallback) ─────┼─► Liquidsoap ──► Icecast ──► players / VLC / …
+silence ─────────────────────┘   (never drops)     (:port)
 ```
 
-Icecast je server, na který se přehrávače připojují. Liquidsoap je „studio", které do něj posílá **jeden nepřetržitý stream** a přepíná obsah (Spotify → záloha → ticho) **bez shození spojení**, takže posluchači nikdy nevypadnou.
+Icecast is the server players connect to. Liquidsoap is the "studio" that feeds it **one continuous stream** and switches the content (Spotify → fallback → silence) **without dropping the connection**, so listeners never get kicked off.
 
-## Stav
+## Status
 
-- ✅ **Stabilní stream** + fallback na online rádio, nikdy nespadne.
-- ✅ **Spotify Connect** vstup na každý stream.
-- 🎯 **v1.0** — finální „stabilní stream + Spotify Connect + ruční streamy". Ovládání LARA
-  rádií se přesunulo do samostatného projektu **[LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)**.
+- ✅ **Stable stream** + online-radio fallback, never drops.
+- ✅ **Spotify Connect** input per stream.
+- 🎯 **v1.0** — final "stable stream + Spotify Connect + manual streams". LARA radio control has moved to a separate project, **[LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)**.
