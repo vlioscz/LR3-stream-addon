@@ -4,16 +4,25 @@
 
 [![Add repository to Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fvlioscz%2FLR3-stream-addon)
 
+> **⚠️ LR3 Stream is no longer maintained.** Development continues in
+> **[LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)**, which grew out of this add-on: the same Icecast
+> stream with Spotify Connect, and it also finds ELKO EP "LARA" radios and switches them onto the
+> stream by itself. **If you have LARA radios, use LR3-AudioZone.**
+>
+> This add-on still installs and runs as it is, but it will get no more fixes — including ones
+> already made in LR3-AudioZone:
+>
+> - **It stores the Spotify login**, so whoever last picked a stream keeps it in their Spotify app
+>   away from home and can play to it from anywhere (fixed in AudioZone 0.3.5).
+> - **Up to 1 GB of audio cache per stream** is written to disk — on an HA Green that is soldered
+>   storage (AudioZone 0.3.7 cut it to 200 MB and made it configurable).
+> - **The stream goes out at 44.1 kHz.** LARA radios playing a 44.1 kHz stream from AudioZone
+>   consumed it slightly faster than it arrived and dropped out roughly every 26 minutes; moving
+>   to 48 kHz cured that there (AudioZone 0.4.0). It has not been measured with this add-on.
+
 A rock-solid **local radio stream** for Home Assistant. Built on **Icecast + Liquidsoap**, so the stream **never drops**. **Spotify Connect** feeds the audio in (via librespot); when nothing is playing it stays alive and, after a configurable delay, an online-radio fallback kicks in (e.g. Evropa 2). Any player (VLC, in-wall radios, a browser…) can tune in and nothing kicks it off.
 
 That's the key difference from MPD's "HTTPd output", which stops when idle — players don't understand that and disconnect.
-
-> **⚠️ This add-on now lags well behind [LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)** — a
-> parallel project built specifically for ELKO EP "LARA" radios (it also switches the radios onto the stream
-> via a Slim server / SlimProto). LR3 Stream is the earlier "stream + Spotify Connect only" branch; it hasn't
-> kept up, so it is **not guaranteed to work correctly**. That said, most of the fixes since the split were to
-> **LARA communication, not the radio streaming itself** — so the streaming part here should still be fine.
-> If you have LARA radios, use **LR3-AudioZone** instead.
 
 ---
 
@@ -75,4 +84,4 @@ Icecast is the server players connect to. Liquidsoap is the "studio" that feeds 
 
 - ✅ **Stable stream** + online-radio fallback, never drops.
 - ✅ **Spotify Connect** input per stream.
-- 🎯 **v1.0** — final "stable stream + Spotify Connect + manual streams". LARA radio control has moved to a separate project, **[LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)**.
+- ⛔ **No longer maintained** (last release 1.0.1). Development continues in **[LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)** — see the notice at the top.

@@ -1,12 +1,22 @@
 # LR3 Stream
 
-Stabilní lokální rozhlasový stream (Icecast + Liquidsoap), který **nikdy nevypadne**. Zvuk posílá **Spotify Connect** (librespot); když nic nehraje, drží se živý a po prodlevě naskočí záloha (např. Evropa 2). Jakýkoli přehrávač (VLC, rádio, prohlížeč) se připojí a nic ho neodpojí.
+> **⚠️ LR3 Stream se už neudržuje.** Vývoj pokračuje v
+> **[LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)**, který z tohoto addonu vyrostl: stejný Icecast
+> stream se Spotify Connect, a navíc sám najde rádia ELKO EP „LARA" a přepne je na stream.
+> **Máš-li LARA rádia, použij LR3-AudioZone.**
+>
+> Tenhle addon se dál nainstaluje a poběží tak, jak je, ale žádné opravy už nedostane — ani ty,
+> které v LR3-AudioZone už jsou:
+>
+> - **Ukládá přihlášení ke Spotify**, takže kdo stream naposledy vybral, má ho ve Spotify i mimo
+>   domov a může do něj pouštět hudbu odkudkoli (v AudioZone opraveno v 0.3.5).
+> - **Až 1 GB cache audia na každý stream** se zapisuje na disk — u HA Green na připájené
+>   úložiště (AudioZone 0.3.7 to stáhl na 200 MB a dá se nastavit).
+> - **Stream jde ven v 44,1 kHz.** LARA rádia, která hrála 44,1 kHz stream z AudioZone, ho
+>   spotřebovávala o kousek rychleji, než přicházel, a zhruba každých 26 minut vypadla; přechod
+>   na 48 kHz to tam vyléčil (AudioZone 0.4.0). S tímhle addonem to změřené není.
 
-> **⚠️ Tento addon už dost zaostává za [LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)** — souběžným
-> projektem stavěným přímo pro rádia ELKO EP „LARA". LR3 Stream je starší větev „jen stabilní stream +
-> Spotify Connect", nedrží krok, takže **není jisté, jestli bude fungovat správně**. Většina oprav od
-> rozdělení ale řešila **komunikaci s LARA, ne samotné streamování** — streamovací část by tady měla pořád
-> fungovat. Máš LARA rádia? Použij raději **LR3-AudioZone**.
+Stabilní lokální rozhlasový stream (Icecast + Liquidsoap), který **nikdy nevypadne**. Zvuk posílá **Spotify Connect** (librespot); když nic nehraje, drží se živý a po prodlevě naskočí záloha (např. Evropa 2). Jakýkoli přehrávač (VLC, rádio, prohlížeč) se připojí a nic ho neodpojí.
 
 ## Rychlý start
 
@@ -41,4 +51,4 @@ http://<IP_HA>:<port>/<mount>      např.  http://192.168.88.10:8121/default
 
 - ✅ Stabilní stream + fallback
 - ✅ Spotify Connect
-- 🎯 **v1.0 — finální.** Ovládání LARA rádií řeší samostatný projekt **LR3-AudioZone**.
+- ⛔ **Neudržuje se** (poslední verze 1.0.1). Vývoj pokračuje v **[LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)** — viz upozornění nahoře.

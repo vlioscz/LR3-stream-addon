@@ -23,6 +23,10 @@ defined** streams. It does **not** discover or control any radios.
 
 ## Current status
 
+- ⛔ **Unmaintained since 2026-10-09** (owner's decision). Development continues in
+  **LR3-AudioZone**; the README says so at the top, along with the fixes made there that
+  this add-on will not get (stored Spotify login, 1 GB cache per stream, 44.1 kHz output).
+  Do not add features here. If something must change, it is a pointer to LR3-AudioZone.
 - ✅ **v1.0.0 — final.** Stable Icecast+Liquidsoap stream, Spotify Connect per stream (librespot),
   online-radio fallback, mount never drops. Streams are **manual only** (the `zones` option).
 

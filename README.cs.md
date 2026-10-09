@@ -4,16 +4,25 @@
 
 [![Přidat repozitář do Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fvlioscz%2FLR3-stream-addon)
 
+> **⚠️ LR3 Stream se už neudržuje.** Vývoj pokračuje v
+> **[LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)**, který z tohoto addonu vyrostl: stejný Icecast
+> stream se Spotify Connect, a navíc sám najde rádia ELKO EP „LARA" a přepne je na stream.
+> **Máš-li LARA rádia, použij LR3-AudioZone.**
+>
+> Tenhle addon se dál nainstaluje a poběží tak, jak je, ale žádné opravy už nedostane — ani ty,
+> které v LR3-AudioZone už jsou:
+>
+> - **Ukládá přihlášení ke Spotify**, takže kdo stream naposledy vybral, má ho ve Spotify i mimo
+>   domov a může do něj pouštět hudbu odkudkoli (v AudioZone opraveno v 0.3.5).
+> - **Až 1 GB cache audia na každý stream** se zapisuje na disk — u HA Green na připájené
+>   úložiště (AudioZone 0.3.7 to stáhl na 200 MB a dá se nastavit).
+> - **Stream jde ven v 44,1 kHz.** LARA rádia, která hrála 44,1 kHz stream z AudioZone, ho
+>   spotřebovávala o kousek rychleji, než přicházel, a zhruba každých 26 minut vypadla; přechod
+>   na 48 kHz to tam vyléčil (AudioZone 0.4.0). S tímhle addonem to změřené není.
+
 Stabilní **lokální rozhlasový stream** pro Home Assistant. Postaveno na **Icecast + Liquidsoap**, takže stream **nikdy nevypadne**. Do streamu posílá zvuk **Spotify Connect** (přes librespot); když nic nehraje, drží se živý a po nastavené prodlevě naskočí záložní online rádio (např. Evropa 2). Připojí se libovolný přehrávač (VLC, rádia, prohlížeč…) a nic ho neodpojí.
 
 To je hlavní rozdíl proti MPD „HTTPd output", který se při nečinnosti zastaví — a přehrávače to nepochopí a odpojí se.
-
-> **⚠️ Tento addon už dost zaostává za [LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)** — souběžným
-> projektem stavěným přímo pro rádia ELKO EP „LARA" (ten je navíc umí přepínat na stream přes Slim server /
-> SlimProto). LR3 Stream je starší větev „jen stabilní stream + Spotify Connect"; nedrží krok, takže **není
-> jisté, jestli bude fungovat správně**. Většina oprav od rozdělení ale řešila **komunikaci s LARA, ne samotné
-> streamování rádia** — streamovací část by tady tedy měla pořád fungovat. Pokud máš LARA rádia, použij raději
-> **LR3-AudioZone**.
 
 ---
 
@@ -75,5 +84,5 @@ Icecast je server, na který se přehrávače připojují. Liquidsoap je „stud
 
 - ✅ **Stabilní stream** + fallback na online rádio, nikdy nespadne.
 - ✅ **Spotify Connect** vstup na každý stream.
-- 🎯 **v1.0** — finální „stabilní stream + Spotify Connect + ruční streamy". Ovládání LARA
-  rádií se přesunulo do samostatného projektu **[LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)**.
+- ⛔ **Neudržuje se** (poslední verze 1.0.1). Vývoj pokračuje v
+  **[LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)** — viz upozornění nahoře.
