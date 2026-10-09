@@ -8,9 +8,12 @@ Stabilní **lokální rozhlasový stream** pro Home Assistant. Postaveno na **Ic
 
 To je hlavní rozdíl proti MPD „HTTPd output", který se při nečinnosti zastaví — a přehrávače to nepochopí a odpojí se.
 
-> **Ovládáš rádia ELKO EP „LARA"?** Automatické přepínání LARA rádií na tento stream přes
-> **Slim server (SlimProto)** řeší samostatný projekt **[LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)**.
-> LR3 Stream je čistý „stabilní stream + Spotify Connect"; nic aktivně nepřepíná.
+> **⚠️ Tento addon už dost zaostává za [LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)** — souběžným
+> projektem stavěným přímo pro rádia ELKO EP „LARA" (ten je navíc umí přepínat na stream přes Slim server /
+> SlimProto). LR3 Stream je starší větev „jen stabilní stream + Spotify Connect"; nedrží krok, takže **není
+> jisté, jestli bude fungovat správně**. Většina oprav od rozdělení ale řešila **komunikaci s LARA, ne samotné
+> streamování rádia** — streamovací část by tady tedy měla pořád fungovat. Pokud máš LARA rádia, použij raději
+> **LR3-AudioZone**.
 
 ---
 

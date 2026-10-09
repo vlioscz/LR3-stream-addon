@@ -8,9 +8,12 @@ A rock-solid **local radio stream** for Home Assistant. Built on **Icecast + Liq
 
 That's the key difference from MPD's "HTTPd output", which stops when idle — players don't understand that and disconnect.
 
-> **Do you control ELKO EP "LARA" radios?** Automatically switching LARA radios onto this stream via a
-> **Slim server (SlimProto)** is handled by a separate project, **[LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)**.
-> LR3 Stream is a pure "stable stream + Spotify Connect"; it doesn't actively switch anything.
+> **⚠️ This add-on now lags well behind [LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)** — a
+> parallel project built specifically for ELKO EP "LARA" radios (it also switches the radios onto the stream
+> via a Slim server / SlimProto). LR3 Stream is the earlier "stream + Spotify Connect only" branch; it hasn't
+> kept up, so it is **not guaranteed to work correctly**. That said, most of the fixes since the split were to
+> **LARA communication, not the radio streaming itself** — so the streaming part here should still be fine.
+> If you have LARA radios, use **LR3-AudioZone** instead.
 
 ---
 
