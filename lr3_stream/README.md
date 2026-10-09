@@ -2,6 +2,12 @@
 
 Stabilní lokální rozhlasový stream (Icecast + Liquidsoap), který **nikdy nevypadne**. Zvuk posílá **Spotify Connect** (librespot); když nic nehraje, drží se živý a po prodlevě naskočí záloha (např. Evropa 2). Jakýkoli přehrávač (VLC, rádio, prohlížeč) se připojí a nic ho neodpojí.
 
+> **⚠️ Tento addon už dost zaostává za [LR3-AudioZone](https://github.com/vlioscz/LR3-AudioZone)** — souběžným
+> projektem stavěným přímo pro rádia ELKO EP „LARA". LR3 Stream je starší větev „jen stabilní stream +
+> Spotify Connect", nedrží krok, takže **není jisté, jestli bude fungovat správně**. Většina oprav od
+> rozdělení ale řešila **komunikaci s LARA, ne samotné streamování** — streamovací část by tady měla pořád
+> fungovat. Máš LARA rádia? Použij raději **LR3-AudioZone**.
+
 ## Rychlý start
 
 1. **Configuration** → nastav `port` a `zones` (streamy) → **Start**.
